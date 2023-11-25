@@ -20,7 +20,7 @@ test: build_dir
 compile: build_dir
 	go build -o $(PROJECT_BINARY) $(PROJECT_SRC_PATH)
 
-build: lint test compile
+build: clean lint test compile
 
 clean:
 	echo "Cleaning all"
