@@ -1,5 +1,5 @@
 {
-  "code": "InvalidParam",
-  "message": "provided parameter %1 is invalid",
+  "code": "PayloadError",
+  "message": "invalid payload: %1",
   "args": ["body"]
 }

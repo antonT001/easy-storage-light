@@ -23,7 +23,7 @@ func (s *Server) upload(w http.ResponseWriter, r *http.Request) {
 
 	if r.ContentLength <= 0 {
 		err := errors.New("empty request body")
-		restErr := httplib.NewError(err, httplib.InvalidParam, "body")
+		restErr := httplib.NewError(err, httplib.PayloadError, "body")
 		s.sendResponse(w, restErr.HTTPStatus, restErr)
 		return
 	}
