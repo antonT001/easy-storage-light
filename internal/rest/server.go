@@ -12,7 +12,7 @@ import (
 
 type Server struct {
 	svc service.Service
-	app *http.Server
+	App *http.Server
 }
 
 func NewServer(cfg config.ServerConfig, svc service.Service) *Server {
@@ -25,7 +25,7 @@ func NewServer(cfg config.ServerConfig, svc service.Service) *Server {
 
 	srv := &Server{
 		svc: svc,
-		app: app,
+		App: app,
 	}
 
 	app.Handler = srv.initRoutes()
@@ -33,7 +33,7 @@ func NewServer(cfg config.ServerConfig, svc service.Service) *Server {
 }
 
 func (s *Server) Run() error {
-	return s.app.ListenAndServe()
+	return s.App.ListenAndServe()
 }
 
 func (s *Server) ping(w http.ResponseWriter, r *http.Request) {
