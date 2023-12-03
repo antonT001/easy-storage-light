@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/antonT001/easy-storage-light/internal/lib/httplib"
@@ -15,7 +16,14 @@ func (s *Server) upload(w http.ResponseWriter, r *http.Request) {
 	upload.SHA256FileChecksum = r.Header.Get(httplib.SHA256FileChecksumHeaderKey)
 	upload.SHA256ChunkChecksum = r.Header.Get(httplib.SHA256ChunkChecksumHeaderKey)
 	if err := upload.Valdate(); err != nil {
-		restErr := httplib.NewError(err, httplib.InvalidParam, nil)
+		restErr := httplib.NewError(err, httplib.InvalidParam, "header")
+		s.sendResponse(w, restErr.HTTPStatus, restErr)
+		return
+	}
+
+	if r.ContentLength <= 0 {
+		err := errors.New("empty request body")
+		restErr := httplib.NewError(err, httplib.InvalidParam, "body")
 		s.sendResponse(w, restErr.HTTPStatus, restErr)
 		return
 	}
