@@ -10,7 +10,7 @@ import (
 	"github.com/antonT001/easy-storage-light/internal/config"
 )
 
-//go:generate mockery --name FileMgr
+//go:generate mockgen -source=service.go -destination=service_mock.go -package=filemgr
 type FileMgr interface {
 	OpenFile(relativePath string) (*os.File, error)
 	CreateDirectory(relativePath string) error
