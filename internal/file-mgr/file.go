@@ -4,25 +4,38 @@ import (
 	"io"
 	"os"
 	"path"
+
+	"github.com/antonT001/easy-storage-light/internal/lib/httplib"
 )
 
 func (fm fileMgr) OpenFile(relativePath string) (*os.File, error) {
-	return os.Open(path.Join(fm.storageBasePath, relativePath))
+	f, err := os.Open(path.Join(fm.storageBasePath, relativePath))
+	if err != nil {
+		restErr := httplib.NewError(err, httplib.GeneralFileMgrError, `"OpenFile"`)
+		return nil, restErr
+	}
+	return f, nil
 }
 
 func (fm fileMgr) CreateFile(relativePath string) (*os.File, error) {
-	dir := path.Dir(relativePath)
-	if dir != "." {
-		if err := fm.CreateDirectory(dir); err != nil {
-			return nil, err
-		}
+	if err := fm.CreateDirectory(path.Dir(relativePath)); err != nil {
+		return nil, err
 	}
-	return os.Create(path.Join(fm.storageBasePath, relativePath))
+
+	f, err := os.Create(path.Join(fm.storageBasePath, relativePath))
+	if err != nil {
+		restErr := httplib.NewError(err, httplib.GeneralFileMgrError, `"CreateFile"`)
+		return nil, restErr
+	}
+	return f, nil
 }
 
 func (fm fileMgr) CopyFile(dst io.Writer, src io.Reader) error {
-	_, err := io.Copy(dst, src)
-	return err
+	if _, err := io.Copy(dst, src); err != nil {
+		restErr := httplib.NewError(err, httplib.GeneralFileMgrError, `"CopyFile"`)
+		return restErr
+	}
+	return nil
 }
 
 func (fm fileMgr) DeleteFilesByPaths(relativePaths []string) error {
@@ -38,8 +51,9 @@ func (fm fileMgr) DeleteFilesByPaths(relativePaths []string) error {
 
 	if delErr.OriginError != nil {
 		delErr.Message = "failed delete files"
-		return delErr
-	}
+		restErr := httplib.NewError(delErr, httplib.GeneralFileMgrError, `"DeleteFilesByPaths"`)
+		return restErr
 
+	}
 	return nil
 }
