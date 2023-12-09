@@ -20,7 +20,7 @@ func main() {
 		log.Fatalf("failed to initialize configuration fileMgr: %v", err)
 	}
 
-	svc := service.NewService(fileMgr)
+	svc := service.New(fileMgr)
 	app := rest.NewServer(cfg.Server, svc)
 
 	log.Fatal(app.Run())

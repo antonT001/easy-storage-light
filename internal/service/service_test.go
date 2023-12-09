@@ -41,7 +41,7 @@ func Test_service_UploadChunk(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	mockFilemgr := filemgr.NewMockFileMgr(ctrl)
-	svc := service{
+	svc := serviceImpl{
 		fileMgr: mockFilemgr,
 	}
 

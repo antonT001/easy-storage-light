@@ -14,20 +14,17 @@ type Service interface {
 	UploadChunk(upload *models.UploadChunk, body io.ReadCloser) error
 }
 
-type service struct {
+type serviceImpl struct {
 	fileMgr filemgr.FileMgr
 }
 
-func NewService(
-	filemgr filemgr.FileMgr,
-
-) Service {
-	return &service{
+func New(filemgr filemgr.FileMgr) Service {
+	return &serviceImpl{
 		fileMgr: filemgr,
 	}
 }
 
-func (svc service) UploadChunk(upload *models.UploadChunk, body io.ReadCloser) error {
+func (svc serviceImpl) UploadChunk(upload *models.UploadChunk, body io.ReadCloser) error {
 	nameChunk := fmt.Sprintf("%s<chunk>%s", upload.ChunkNum, upload.Name)
 	file, err := svc.fileMgr.CreateFile(path.Join(upload.UUID, nameChunk))
 	if err != nil {
