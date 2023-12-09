@@ -15,7 +15,7 @@ func main() {
 		log.Fatalf("failed to initialize configuration: %v", err)
 	}
 
-	fileMgr, err := filemgr.NewService(cfg.FileMgr)
+	fileMgr, err := filemgr.New(cfg.FileMgr)
 	if err != nil {
 		log.Fatalf("failed to initialize configuration fileMgr: %v", err)
 	}

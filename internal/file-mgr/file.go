@@ -8,7 +8,7 @@ import (
 	"github.com/antonT001/easy-storage-light/internal/lib/httplib"
 )
 
-func (fm fileMgr) OpenFile(relativePath string) (*os.File, error) {
+func (fm fileMgrImpl) OpenFile(relativePath string) (*os.File, error) {
 	f, err := os.Open(path.Join(fm.storageBasePath, relativePath))
 	if err != nil {
 		restErr := httplib.NewError(err, httplib.GeneralFileMgrError, `"OpenFile"`)
@@ -17,7 +17,7 @@ func (fm fileMgr) OpenFile(relativePath string) (*os.File, error) {
 	return f, nil
 }
 
-func (fm fileMgr) CreateFile(relativePath string) (*os.File, error) {
+func (fm fileMgrImpl) CreateFile(relativePath string) (*os.File, error) {
 	if err := fm.CreateDirectory(path.Dir(relativePath)); err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func (fm fileMgr) CreateFile(relativePath string) (*os.File, error) {
 	return f, nil
 }
 
-func (fm fileMgr) CopyFile(dst io.Writer, src io.Reader) error {
+func (fm fileMgrImpl) CopyFile(dst io.Writer, src io.Reader) error {
 	if _, err := io.Copy(dst, src); err != nil {
 		restErr := httplib.NewError(err, httplib.GeneralFileMgrError, `"CopyFile"`)
 		return restErr
@@ -38,7 +38,7 @@ func (fm fileMgr) CopyFile(dst io.Writer, src io.Reader) error {
 	return nil
 }
 
-func (fm fileMgr) DeleteFilesByPaths(relativePaths []string) error {
+func (fm fileMgrImpl) DeleteFilesByPaths(relativePaths []string) error {
 	delErr := new(ErrorWithArguments)
 
 	for i := range relativePaths {

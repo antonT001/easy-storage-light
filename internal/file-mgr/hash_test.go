@@ -43,7 +43,7 @@ func Test_fileMgr_SHA256Checksum(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fm := fileMgr{
+			fm := fileMgrImpl{
 				storageBasePath: tt.fields.storageBasePath,
 			}
 			actual := fm.SHA256Checksum(tt.args.data)
