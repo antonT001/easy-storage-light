@@ -1,9 +1,0 @@
-server:
-  host: "localhost"
-  port: 9012
-  idle_timeout: 15s
-  write_timeout: 15s
-  read_timeout: 15s
-
-file_mgr:
-  storage_base_path: "/Users/a.trufanov/go/src/local/upload/data"

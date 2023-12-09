@@ -17,7 +17,7 @@ type Server struct {
 
 func NewServer(cfg config.ServerConfig, svc service.Service) *Server {
 	app := &http.Server{
-		Addr:         fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		Addr:         fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
 		IdleTimeout:  cfg.IdleTimeout,
 		WriteTimeout: cfg.WriteTimeout,
 		ReadTimeout:  cfg.ReadTimeout,

@@ -11,7 +11,7 @@ import (
 )
 
 func setup(t *testing.T, mock mockFn) *rest.Server {
-	cfg := config.ServerConfig{Host: "localhost", Port: 8080}
+	cfg := config.ServerConfig{Host: "localhost", Port: "8080"}
 
 	ctrl := gomock.NewController(t)
 

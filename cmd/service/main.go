@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	cfg, err := config.NewConfig("./config.yaml")
+	cfg, err := config.New()
 	if err != nil {
 		log.Fatalf("failed to initialize configuration: %v", err)
 	}

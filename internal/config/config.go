@@ -3,9 +3,6 @@ package config
 import (
 	"errors"
 	"fmt"
-	"os"
-
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -17,25 +14,16 @@ var (
 )
 
 type Config struct {
-	Server  ServerConfig  `yaml:"server"`
-	FileMgr FileMgrConfig `yaml:"file_mgr"`
+	Server  ServerConfig
+	FileMgr FileMgrConfig
 }
 
-func NewConfig(path string) (*Config, error) {
-	if path == "" {
-		return nil, errors.New("empty path")
-	}
+func New() (*Config, error) {
+	cfg := new(Config)
+	cfg.Server.parseEnv()
+	cfg.FileMgr.parseEnv()
 
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("failure to read config file: %s", path)
-	}
-	cfg := &Config{}
-	if err = yaml.Unmarshal(data, cfg); err != nil {
-		return nil, fmt.Errorf("failure to parse config: %v", err)
-	}
-
-	if err = cfg.validate(); err != nil {
+	if err := cfg.validate(); err != nil {
 		return nil, err
 	}
 	return cfg, nil

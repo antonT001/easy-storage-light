@@ -22,7 +22,7 @@ func TestConfig_validate(t *testing.T) {
 			fields: fields{
 				Server: ServerConfig{
 					Host: "localhost",
-					Port: 9012,
+					Port: "9012",
 				},
 				FileMgr: FileMgrConfig{
 					StorageBasePath: "/opt/easy-storage-light/data",
@@ -35,7 +35,7 @@ func TestConfig_validate(t *testing.T) {
 			fields: fields{
 				Server: ServerConfig{
 					Host: "",
-					Port: 9012,
+					Port: "9012",
 				},
 				FileMgr: FileMgrConfig{
 					StorageBasePath: "/opt/easy-storage-light/data",
@@ -60,7 +60,7 @@ func TestConfig_validate(t *testing.T) {
 			fields: fields{
 				Server: ServerConfig{
 					Host: "localhost",
-					Port: 9012,
+					Port: "9012",
 				},
 			},
 			expected: invalidErrorWrap(errStorageBasePathEmpty),
