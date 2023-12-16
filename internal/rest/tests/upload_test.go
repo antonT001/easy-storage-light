@@ -17,6 +17,7 @@ func TestUpload(t *testing.T) {
 			headers: map[string]string{
 				httplib.UUIDHeaderKey:                "39c4739c-91cf-11ee-b9d1-0242ac120002",
 				httplib.ChunkNumHeaderKey:            "0",
+				httplib.TotalChunksHeaderKey:         "3",
 				httplib.NameHeaderKey:                "gopher.jpg",
 				httplib.SHA256ChunkChecksumHeaderKey: "cbb756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6",
 				httplib.SHA256FileChecksumHeaderKey:  "cd372fb85148700fa88095e3492d3f9f5beb43e555e5ff26d95f5a6adc36f8e6",
@@ -39,6 +40,7 @@ func TestUpload(t *testing.T) {
 			headers: map[string]string{
 				httplib.UUIDHeaderKey:                "39c4739c-91cf-11ee-b9d1-0242ac120002",
 				httplib.ChunkNumHeaderKey:            "1",
+				httplib.TotalChunksHeaderKey:         "3",
 				httplib.NameHeaderKey:                "gopher.jpg",
 				httplib.SHA256ChunkChecksumHeaderKey: "cbb756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6",
 				httplib.SHA256FileChecksumHeaderKey:  "cd372fb85148700fa88095e3492d3f9f5beb43e555e5ff26d95f5a6adc36f8e6",

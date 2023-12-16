@@ -8,32 +8,29 @@ import (
 )
 
 func TestUploadChunk_Valdate(t *testing.T) {
-	type fields struct {
-		File                File
-		ChunkNum            string
-		SHA256ChunkChecksum string
-	}
+
 	tests := []struct {
 		name     string
-		fields   fields
+		model    UploadChunk
 		expected error
 	}{
 		{
 			name: "valid model",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID:               "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name:               "gopher.jpg",
 					SHA256FileChecksum: "cd372fb85148700fa88095e3492d3f9f5beb43e555e5ff26d95f5a6adc36f8e6",
 				},
 				ChunkNum:            "0",
+				TotalChunks:         "11",
 				SHA256ChunkChecksum: "cbb756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6",
 			},
 			expected: nil,
 		},
 		{
 			name: "invalid UUID",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11 ",
 				},
@@ -42,7 +39,7 @@ func TestUploadChunk_Valdate(t *testing.T) {
 		},
 		{
 			name: "invalid name (length)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "",
@@ -52,7 +49,7 @@ func TestUploadChunk_Valdate(t *testing.T) {
 		},
 		{
 			name: "invalid name (content)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "gopher.jpg   ",
@@ -62,7 +59,7 @@ func TestUploadChunk_Valdate(t *testing.T) {
 		},
 		{
 			name: "invalid ChunkNum (not a number)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "gopher.jpg",
@@ -73,7 +70,7 @@ func TestUploadChunk_Valdate(t *testing.T) {
 		},
 		{
 			name: "invalid ChunkNum (not a positive number)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "gopher.jpg",
@@ -83,51 +80,79 @@ func TestUploadChunk_Valdate(t *testing.T) {
 			expected: errors.New("chunk_num field has an invalid"),
 		},
 		{
+			name: "invalid TotalChunks (not a number)",
+			model: UploadChunk{
+				File: File{
+					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
+					Name: "gopher.jpg",
+				},
+				ChunkNum:    "0",
+				TotalChunks: "x",
+			},
+			expected: errors.New("total_chunks field has an invalid"),
+		},
+		{
+			name: "invalid TotalChunks (not a positive number)",
+			model: UploadChunk{
+				File: File{
+					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
+					Name: "gopher.jpg",
+				},
+				ChunkNum:    "0",
+				TotalChunks: "-13",
+			},
+			expected: errors.New("total_chunks field has an invalid"),
+		},
+		{
 			name: "invalid ChunkChecksum (length)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "gopher.jpg",
 				},
 				ChunkNum:            "0",
+				TotalChunks:         "11",
 				SHA256ChunkChecksum: "cbb756",
 			},
 			expected: errors.New("checksum_chunk field has an invalid length"),
 		},
 		{
 			name: "invalid ChunkChecksum (content)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID: "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name: "gopher.jpg",
 				},
 				ChunkNum:            "0",
+				TotalChunks:         "11",
 				SHA256ChunkChecksum: "CBB756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6", // use capital letters
 			},
 			expected: errors.New("checksum_chunk field does not satisfy the regular expression"),
 		},
 		{
 			name: "invalid FileChecksum (length)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID:               "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name:               "gopher.jpg",
 					SHA256FileChecksum: "cd372",
 				},
 				ChunkNum:            "0",
+				TotalChunks:         "11",
 				SHA256ChunkChecksum: "cbb756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6",
 			},
 			expected: errors.New("checksum_file field has an invalid length"),
 		},
 		{
 			name: "invalid FileChecksum (content)",
-			fields: fields{
+			model: UploadChunk{
 				File: File{
 					UUID:               "39c4739c-91cf-11ee-b9d1-0242ac120002",
 					Name:               "gopher.jpg",
 					SHA256FileChecksum: "cd372f.85148700fa88095 3492d3f9f5beb43e555-5ff26d95f5a6adc36f8e6",
 				},
 				ChunkNum:            "0",
+				TotalChunks:         "11",
 				SHA256ChunkChecksum: "cbb756eb255316279a3e09cb7342c38754060a5b4bd6560e14f51d85cbd745e6",
 			},
 			expected: errors.New("checksum_file field does not satisfy the regular expression"),
@@ -135,12 +160,7 @@ func TestUploadChunk_Valdate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := UploadChunk{
-				File:                tt.fields.File,
-				ChunkNum:            tt.fields.ChunkNum,
-				SHA256ChunkChecksum: tt.fields.SHA256ChunkChecksum,
-			}
-			err := u.Valdate()
+			err := tt.model.Validate()
 			assert.Equal(t, tt.expected, err)
 
 		})
