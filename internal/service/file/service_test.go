@@ -1,4 +1,4 @@
-package fileService
+package fileservice
 
 import (
 	"io"
@@ -6,14 +6,14 @@ import (
 
 	filemgr "github.com/antonT001/easy-storage-light/internal/file-mgr"
 	"github.com/antonT001/easy-storage-light/internal/models"
-	fileRepository "github.com/antonT001/easy-storage-light/internal/repository/file"
+	filerepository "github.com/antonT001/easy-storage-light/internal/repository/file"
 
 	gomock "github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
 type Mocks struct {
-	FileRepo *fileRepository.MockRepository
+	FileRepo *filerepository.MockRepository
 	FileMgr  *filemgr.MockFileMgr
 }
 
@@ -45,7 +45,7 @@ func Test_service_UploadChunk(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	mockFilemgr := filemgr.NewMockFileMgr(ctrl)
-	mockFileRepo := fileRepository.NewMockRepository(ctrl)
+	mockFileRepo := filerepository.NewMockRepository(ctrl)
 	svc := serviceImpl{
 		fileRepo: mockFileRepo,
 		fileMgr:  mockFilemgr,

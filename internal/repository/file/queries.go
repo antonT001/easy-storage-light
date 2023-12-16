@@ -1,4 +1,4 @@
-package fileRepository
+package filerepository
 
 import (
 	"context"

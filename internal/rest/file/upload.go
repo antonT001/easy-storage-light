@@ -1,4 +1,4 @@
-package fileHandler
+package filehandler
 
 import (
 	"errors"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/antonT001/easy-storage-light/internal/lib/httplib"
 	"github.com/antonT001/easy-storage-light/internal/models"
-	fileService "github.com/antonT001/easy-storage-light/internal/service/file"
+	fileservice "github.com/antonT001/easy-storage-light/internal/service/file"
 )
 
 type Handler interface {
@@ -15,10 +15,10 @@ type Handler interface {
 }
 
 type fileHandler struct {
-	fileSrc fileService.Service
+	fileSrc fileservice.Service
 }
 
-func New(fileSrc fileService.Service) Handler {
+func New(fileSrc fileservice.Service) Handler {
 	return &fileHandler{fileSrc: fileSrc}
 }
 

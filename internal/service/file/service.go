@@ -1,4 +1,4 @@
-package fileService
+package fileservice
 
 import (
 	"fmt"
@@ -8,20 +8,20 @@ import (
 
 	filemgr "github.com/antonT001/easy-storage-light/internal/file-mgr"
 	"github.com/antonT001/easy-storage-light/internal/models"
-	fileRepository "github.com/antonT001/easy-storage-light/internal/repository/file"
+	filerepository "github.com/antonT001/easy-storage-light/internal/repository/file"
 )
 
-//go:generate mockgen -source=service.go -destination=service_mock.go -package=fileService
+//go:generate mockgen -source=service.go -destination=service_mock.go -package=fileservice
 type Service interface {
 	UploadChunk(upload models.UploadChunk, body io.ReadCloser) error
 }
 
 type serviceImpl struct {
-	fileRepo fileRepository.Repository
+	fileRepo filerepository.Repository
 	fileMgr  filemgr.FileMgr
 }
 
-func New(fileRepo fileRepository.Repository, filemgr filemgr.FileMgr) Service {
+func New(fileRepo filerepository.Repository, filemgr filemgr.FileMgr) Service {
 	return &serviceImpl{
 		fileRepo: fileRepo,
 		fileMgr:  filemgr,
@@ -40,7 +40,7 @@ func (svc serviceImpl) UploadChunk(upload models.UploadChunk, body io.ReadCloser
 	if err != nil {
 		return err
 	}
-	empty := fileRepository.Chunk{}
+	empty := filerepository.Chunk{}
 	empty.FromModel(upload)
 	err = svc.fileRepo.AddChunk(empty) // TODO перед сохранением файла проверяем на его наличие
 	if err != nil {

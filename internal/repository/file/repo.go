@@ -1,8 +1,8 @@
-package fileRepository
+package filerepository
 
 import "github.com/seivanov1986/sql_client"
 
-//go:generate mockgen -source=repo.go -destination=repo_mock.go -package=fileRepository
+//go:generate mockgen -source=repo.go -destination=repo_mock.go -package=filerepository
 type Repository interface {
 	AddChunk(arg Chunk) error
 	AllChunksUploadedForUUID(deliveryUUID string) (bool, error)

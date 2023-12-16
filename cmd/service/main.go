@@ -5,10 +5,10 @@ import (
 
 	"github.com/antonT001/easy-storage-light/internal/config"
 	filemgr "github.com/antonT001/easy-storage-light/internal/file-mgr"
-	fileRepository "github.com/antonT001/easy-storage-light/internal/repository/file"
+	filerepository "github.com/antonT001/easy-storage-light/internal/repository/file"
 	"github.com/antonT001/easy-storage-light/internal/rest"
-	fileHandler "github.com/antonT001/easy-storage-light/internal/rest/file"
-	fileService "github.com/antonT001/easy-storage-light/internal/service/file"
+	filehandler "github.com/antonT001/easy-storage-light/internal/rest/file"
+	fileservice "github.com/antonT001/easy-storage-light/internal/service/file"
 	"github.com/antonT001/easy-storage-light/migrations"
 	"github.com/seivanov1986/sql_client/sqlite"
 )
@@ -33,11 +33,11 @@ func main() {
 		log.Fatalf("failed database migrations: %v", err)
 	}
 
-	fileRepo := fileRepository.New(db)
+	fileRepo := filerepository.New(db)
 
-	fileSvc := fileService.New(fileRepo, fileMgr)
+	fileSvc := fileservice.New(fileRepo, fileMgr)
 
-	fHandler := fileHandler.New(fileSvc)
+	fHandler := filehandler.New(fileSvc)
 
 	app := rest.NewServer(cfg.Server, fHandler)
 
