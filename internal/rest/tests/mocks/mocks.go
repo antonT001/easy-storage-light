@@ -1,9 +1,7 @@
 package mocks
 
-import (
-	"github.com/antonT001/easy-storage-light/internal/service"
-)
+import fileService "github.com/antonT001/easy-storage-light/internal/service/file"
 
 type Mocks struct {
-	Service *service.MockService
+	FileService *fileService.MockService
 }

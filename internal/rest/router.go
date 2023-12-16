@@ -16,7 +16,7 @@ func (s *Server) initRoutes() http.Handler {
 
 	{ // files
 		files := v1.PathPrefix("/files").Subrouter()
-		files.HandleFunc("/upload", s.upload).Methods(http.MethodPost, http.MethodOptions)
+		files.HandleFunc("/upload", s.fileHandler.Upload).Methods(http.MethodPost, http.MethodOptions)
 	}
 
 	return router

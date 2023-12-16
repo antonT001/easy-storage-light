@@ -5,5 +5,5 @@ import (
 )
 
 func Upload(m *Mocks) {
-	m.Service.EXPECT().UploadChunk(gomock.Any(), gomock.Any()).Return(nil)
+	m.FileService.EXPECT().UploadChunk(gomock.Any(), gomock.Any()).Return(nil)
 }

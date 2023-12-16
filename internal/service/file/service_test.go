@@ -1,4 +1,4 @@
-package service
+package fileService
 
 import (
 	"io"
@@ -6,18 +6,20 @@ import (
 
 	filemgr "github.com/antonT001/easy-storage-light/internal/file-mgr"
 	"github.com/antonT001/easy-storage-light/internal/models"
+	fileRepository "github.com/antonT001/easy-storage-light/internal/repository/file"
 
 	gomock "github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
 type Mocks struct {
-	FileMgr *filemgr.MockFileMgr
+	FileRepo *fileRepository.MockRepository
+	FileMgr  *filemgr.MockFileMgr
 }
 
 func Test_service_UploadChunk(t *testing.T) {
 	type args struct {
-		upload *models.UploadChunk
+		upload models.UploadChunk
 		body   io.ReadCloser
 	}
 	tests := []struct {
@@ -29,11 +31,13 @@ func Test_service_UploadChunk(t *testing.T) {
 		{
 			name: "ok",
 			args: args{
-				upload: &models.UploadChunk{},
+				upload: models.UploadChunk{},
 			},
 			prepare: func(m *Mocks) {
 				createFile := m.FileMgr.EXPECT().CreateFile(gomock.Any()).Return(nil, nil)
-				m.FileMgr.EXPECT().CopyFile(gomock.Any(), gomock.Any()).Return(nil).After(createFile)
+				copyFile := m.FileMgr.EXPECT().CopyFile(gomock.Any(), gomock.Any()).Return(nil).After(createFile)
+				addChunk := m.FileRepo.EXPECT().AddChunk(gomock.Any()).Return(nil).After(copyFile)
+				m.FileRepo.EXPECT().AllChunksUploadedForUUID("").Return(true, nil).After(addChunk)
 			},
 			expected: nil,
 		},
@@ -41,14 +45,17 @@ func Test_service_UploadChunk(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	mockFilemgr := filemgr.NewMockFileMgr(ctrl)
+	mockFileRepo := fileRepository.NewMockRepository(ctrl)
 	svc := serviceImpl{
-		fileMgr: mockFilemgr,
+		fileRepo: mockFileRepo,
+		fileMgr:  mockFilemgr,
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.prepare(&Mocks{
-				FileMgr: mockFilemgr,
+				FileRepo: mockFileRepo,
+				FileMgr:  mockFilemgr,
 			})
 			err := svc.UploadChunk(tt.args.upload, tt.args.body)
 			assert.Equal(t, tt.expected, err)
