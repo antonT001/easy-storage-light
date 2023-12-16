@@ -1,4 +1,4 @@
-include .env
+include .env*
 
 BUILD_DIR := ./build
 FILES_DIR := ./files
