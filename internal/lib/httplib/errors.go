@@ -19,6 +19,7 @@ type (
 
 const (
 	GeneralError              = "GeneralError"
+	GeneralDBError            = "GeneralDBError"
 	GeneralFileMgrError       = "GeneralFileMgrError"
 	InvalidObject             = "InvalidObject"
 	InvalidParam              = "InvalidParam"
@@ -31,6 +32,10 @@ const (
 var baseErrorRegistry = ErrorRegistry{
 	GeneralError: RestError{
 		Message:    "unexpected error happen, please contact the support",
+		HTTPStatus: http.StatusInternalServerError,
+	},
+	GeneralDBError: RestError{
+		Message:    "DB operation failed for %1",
 		HTTPStatus: http.StatusInternalServerError,
 	},
 	GeneralFileMgrError: RestError{

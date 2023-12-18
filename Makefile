@@ -1,3 +1,5 @@
+include .env*
+
 BUILD_DIR := ./build
 FILES_DIR := ./files
 PROJECT_NAME := easy-storage-light
@@ -21,6 +23,15 @@ compile: build_dir
 	go build -o $(PROJECT_BINARY) $(PROJECT_SRC_PATH)
 
 build: clean lint test compile
+
+run_local:
+	HOST=${HOST} \
+	PORT=${PORT} \
+	IDLE_TIMEOUT=${IDLE_TIMEOUT} \
+	WRITE_TIMEOUT=${WRITE_TIMEOUT} \
+	READ_TIMEOUT=${READ_TIMEOUT} \
+	STORAGE_BASE_PATH=${STORAGE_BASE_PATH} \
+	go run cmd/service/main.go
 
 clean:
 	echo "Cleaning all"
